@@ -33,6 +33,14 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
+
+                 <li class="{{ Request::is('admin/tag') ? 'active' : '' }}">
+                    <a href="{{ route('admin.tag.index') }}">
+                        <i class="material-icons">label</i>
+                        <span>Tags</span>
+                    </a>
+                </li>
+
                 <li class="header">System</li>
                 
                 
