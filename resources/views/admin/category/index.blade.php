@@ -1,6 +1,6 @@
 @extends('layouts.backend.app')
 
-@section('title', 'Tags')
+@section('title', 'Post')
 
 
 @push('css')
@@ -16,9 +16,9 @@
 
 <div class="container-fluid">
 	<div class="block-header">
-	   <a class="btn btn-primary waves-effect" href="{{ route('admin.tag.create') }}">
+	   <a class="btn btn-primary waves-effect" href="{{ route('admin.category.create') }}">
 	   	<i class="material-icons">add</i>
-		<span>Add New Tag</span>
+		<span>Add New Category</span>
 	   </a>  
 	</div>
 	<!-- Exportable Table -->
@@ -27,8 +27,8 @@
 	        <div class="card">
 	            <div class="header">
 	                <h2>
-	                    ALL TAGS
-	                    <span class="badge bg-red"> {{ $tags->count() }}</span>
+	                    All Categories
+	                    <span class="badge bg-red">{{ $categories->count() }}</span>
 	                </h2>
 	               
 	            </div>
@@ -41,6 +41,7 @@
 	                                <th>Name</th>
 	                                <th>Slug</th>
 	                                <th>Post Count</th>
+	                                <th>Image</th>
 	                                <th>Created At</th>
 	                                <th>Updated At</th>
 	                                <th>Actions</th>
@@ -52,6 +53,7 @@
 	                                <th>Name</th>
 	                                <th>Slug</th>
 	                                <th>Post Count</th>
+	                                <th>Image</th>
 	                                <th>Created At</th>
 	                                <th>Updated At</th>
 	                                <th>Actions</th>
@@ -59,23 +61,24 @@
 	                        </tfoot>
 	                       <tbody>
 	                       	
-	                       	@foreach($tags as $key=>$tag)
+	                       	@foreach($categories as $key=>$category)
 	                       	<tr>
 								<td>{{ $key + 1 }}</td>
-								<td>{{ $tag->name }}</td>
-								<td>{{ $tag->slug }}</td>
-								<td>{{ $tag->posts->count() }}</td>
-								<td>{{ $tag->created_at }}</td>
-								<td>{{ $tag->updated_at }}</td>
+								<td>{{ $category->name }}</td>
+								<td>{{ $category->slug }}</td>
+								<td>{{ $category->posts->count() }}</td>
+								<td>{{ $category->image }}</td>
+								<td>{{ $category->created_at }}</td>
+								<td>{{ $category->updated_at }}</td>
 								<td class="text-center">
-								<a href="{{ route('admin.tag.edit', $tag->id)}}" class="btn btn-primary">
+								<a href="{{ route('admin.category.edit', $category->id)}}" class="btn btn-primary">
 									<i class="material-icons">edit</i>
 								</a>
 
-								<button onclick="deleteTag({{ $tag->id }})" class="btn btn-danger waves-effect" type="button">
+								<button onclick="deleteCategory({{ $category->id }})" class="btn btn-danger waves-effect" type="button">
 									<i class="material-icons">delete</i>
 								</button>
-								<form id="delete-form-{{ $tag->id }}" action="{{ route('admin.tag.destroy', $tag->id) }}" method="POST" style="display: none;">
+								<form id="delete-form-{{ $category->id }}" action="{{ route('admin.category.destroy', $category->id) }}" method="POST" style="display: none;">
 									@csrf
 									@method('DELETE')
 								</form>
@@ -119,7 +122,7 @@
 <!-- Optional: include a polyfill for ES6 Promises for IE11 and Android browser -->
 
 	<script type="text/javascript">
-		function deleteTag(id){
+		function deleteCategory(id){
 			const swalWithBootstrapButtons = swal.mixin({
 			  confirmButtonClass: 'btn btn-success',
 			  cancelButtonClass: 'btn btn-danger',
@@ -145,7 +148,7 @@
 			  ) {
 			    swalWithBootstrapButtons(
 			      'Cancelled',
-			      'Your tag is safe :)',
+			      'Your category is safe :)',
 			      'error'
 			    )
 			  }

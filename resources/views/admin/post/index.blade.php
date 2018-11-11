@@ -1,6 +1,6 @@
 @extends('layouts.backend.app')
 
-@section('title', 'Tags')
+@section('title', 'Post')
 
 
 @push('css')
@@ -16,9 +16,9 @@
 
 <div class="container-fluid">
 	<div class="block-header">
-	   <a class="btn btn-primary waves-effect" href="{{ route('admin.tag.create') }}">
+	   <a class="btn btn-primary waves-effect" href="{{ route('admin.post.create') }}">
 	   	<i class="material-icons">add</i>
-		<span>Add New Tag</span>
+		<span>Add New Post</span>
 	   </a>  
 	</div>
 	<!-- Exportable Table -->
@@ -27,8 +27,8 @@
 	        <div class="card">
 	            <div class="header">
 	                <h2>
-	                    ALL TAGS
-	                    <span class="badge bg-red"> {{ $tags->count() }}</span>
+	                    All Posts
+	                    <span class="badge bg-red">{{ $posts->count() }}</span>
 	                </h2>
 	               
 	            </div>
@@ -38,44 +38,58 @@
 	                        <thead>
 	                            <tr>
 	                                <th>ID</th>
-	                                <th>Name</th>
-	                                <th>Slug</th>
-	                                <th>Post Count</th>
-	                                <th>Created At</th>
-	                                <th>Updated At</th>
+	                                <th>Title</th>
+	                                <th>Author</th>
+	                                <th><i class="material-icons">visibility</i></th>
+	                                <th>Is Approuved</th>
+	                                <th>Status</th>
 	                                <th>Actions</th>
 	                            </tr>
 	                        </thead>
 	                        <tfoot>
 	                            <tr>
 	                                <th>ID</th>
-	                                <th>Name</th>
-	                                <th>Slug</th>
-	                                <th>Post Count</th>
-	                                <th>Created At</th>
-	                                <th>Updated At</th>
+	                                <th>Title</th>
+	                                <th>Author</th>
+	                                <th><i class="material-icons">visibility</i></th>
+	                                <th>Is Approuved</th>
+	                                <th>Status</th>
 	                                <th>Actions</th>
 	                            </tr>
 	                        </tfoot>
 	                       <tbody>
 	                       	
-	                       	@foreach($tags as $key=>$tag)
+	                       	@foreach($posts as $key=>$post)
 	                       	<tr>
 								<td>{{ $key + 1 }}</td>
-								<td>{{ $tag->name }}</td>
-								<td>{{ $tag->slug }}</td>
-								<td>{{ $tag->posts->count() }}</td>
-								<td>{{ $tag->created_at }}</td>
-								<td>{{ $tag->updated_at }}</td>
+								<td>{{ str_limit($post->title, '10') }}</td>
+								<td>{{ $post->user->name }}</td>
+								<td>{{ $post->view_count }}</td>
+								<td>
+									@if($post->is_approuved == true)
+										<span class="badge bg-blue">Approuved</span>
+									@else
+										<span class="badge bg-aqua">Pending</span>
+									@endif
+								</td>
+
+								<td>
+									@if($post->status == true)
+										<span class="badge bg-blue">Published</span>
+									@else
+										<span class="badge bg-aqua">Pending</span>
+									@endif
+								</td>
+
 								<td class="text-center">
-								<a href="{{ route('admin.tag.edit', $tag->id)}}" class="btn btn-primary">
+								<a href="{{ route('admin.post.edit', $post->id)}}" class="btn btn-primary">
 									<i class="material-icons">edit</i>
 								</a>
 
-								<button onclick="deleteTag({{ $tag->id }})" class="btn btn-danger waves-effect" type="button">
+								<button onclick="deletePost({{ $post->id }})" class="btn btn-danger waves-effect" type="button">
 									<i class="material-icons">delete</i>
 								</button>
-								<form id="delete-form-{{ $tag->id }}" action="{{ route('admin.tag.destroy', $tag->id) }}" method="POST" style="display: none;">
+								<form id="delete-form-{{ $post->id }}" action="{{ route('admin.post.destroy', $post->id) }}" method="POST" style="display: none;">
 									@csrf
 									@method('DELETE')
 								</form>
@@ -119,7 +133,7 @@
 <!-- Optional: include a polyfill for ES6 Promises for IE11 and Android browser -->
 
 	<script type="text/javascript">
-		function deleteTag(id){
+		function deletePost(id){
 			const swalWithBootstrapButtons = swal.mixin({
 			  confirmButtonClass: 'btn btn-success',
 			  cancelButtonClass: 'btn btn-danger',
@@ -145,7 +159,7 @@
 			  ) {
 			    swalWithBootstrapButtons(
 			      'Cancelled',
-			      'Your tag is safe :)',
+			      'Your category is safe :)',
 			      'error'
 			    )
 			  }
