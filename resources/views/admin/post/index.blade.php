@@ -15,6 +15,7 @@
 @section('content')
 
 <div class="container-fluid">
+
 	<div class="block-header">
 	   <a class="btn btn-primary waves-effect" href="{{ route('admin.post.create') }}">
 	   	<i class="material-icons">add</i>
@@ -82,6 +83,11 @@
 								</td>
 
 								<td class="text-center">
+								<a href="{{ route('admin.post.show', $post->id)}}" class="btn btn-primary">
+									<i class="material-icons">visibility</i>
+								</a>
+
+
 								<a href="{{ route('admin.post.edit', $post->id)}}" class="btn btn-primary">
 									<i class="material-icons">edit</i>
 								</a>
