@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Notifications\AuthorPostApproved;
+use App\Notifications\NewPostNotify;
 use App\Post;
+use App\Subscriber;
 use App\Tag;
 use App\Category;
 use Carbon\Carbon;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use Illuminate\Http\Request;
@@ -86,6 +90,15 @@ class PostController extends Controller
         $post->save();
         $post->categories()->attach($request->categories);
         $post->tags()->attach($request->tags);
+
+        $subscribers = Subscriber::all();
+
+        foreach ($subscribers as $subscriber)
+        {
+            Notification::route('mail',$subscriber->email)
+                ->notify(new NewPostNotify($post));
+        }
+
         Toastr::success('Post Successfully Saved :)', 'Success');
         return redirect()->route('admin.post.index');
     }
@@ -178,6 +191,10 @@ class PostController extends Controller
         return view('admin.post.pending', compact('posts'));
     }
 
+    /**
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function approval($id)
     {
         $post = Post::find($id);
@@ -185,12 +202,13 @@ class PostController extends Controller
         {
             $post->is_approuved = true;
             $post->save();
+            $post->user->notify(new AuthorPostApproved($post));
             Toastr::success('Post Successfully Approved :)', 'Success');
         } else
         {
             Toastr::success('Post is already Approved :)', 'Success');
         }
-        
+
         return redirect()->back();
     }
 

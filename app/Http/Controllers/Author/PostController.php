@@ -5,11 +5,14 @@ namespace App\Http\Controllers\Author;
 use App\Post;
 use App\Category;
 use App\Tag;
+use App\User;
+use App\Notifications\NewAuthorPost;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 
@@ -83,10 +86,13 @@ class PostController extends Controller
         } else {
             $post->status = false;
         }
-        $post->is_approuved = true;
         $post->save();
         $post->categories()->attach($request->categories);
         $post->tags()->attach($request->tags);
+
+        $users = User::where('role_id', '1')->get();
+        Notification::send($users, new NewAuthorPost($post));
+
         Toastr::success('Post Successfully Saved :)', 'Success');
         return redirect()->route('author.post.index');
     }
@@ -182,7 +188,6 @@ class PostController extends Controller
         } else {
             $post->status = false;
         }
-        $post->is_approuved = true;
         $post->save();
         $post->categories()->sync($request->categories);
         $post->tags()->sync($request->tags);
@@ -198,13 +203,13 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        
+
         if($post->user_id != Auth::id())
         {
             Toastr::error('You are not authorized To access to this Page', 'Error');
             return redirect()->back();
         }
-        
+
         if(Storage::disk('public')->exists('post/'.$post->image))
         {
             Storage::disk('public')->delete('post/'.$post->image);

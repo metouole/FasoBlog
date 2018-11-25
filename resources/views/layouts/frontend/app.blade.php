@@ -22,7 +22,8 @@
     <link href="{{ asset('assets/frontend/css/swiper.css') }}" rel="stylesheet">
 
     <link href="{{ asset('assets/frontend/css/ionicons.css') }}" rel="stylesheet">
-    
+
+
     <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
 
     @stack('css')
@@ -37,6 +38,7 @@
 
     <!-- SCIPTS -->
 
+
     <script src="{{ asset('assets/frontend/js/jquery-3.1.1.min.js') }}"></script>
 
     <script src="{{ asset('assets/frontend/js/tether.min.js') }}"></script>
@@ -49,6 +51,20 @@
 
     <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
     {!! Toastr::message() !!}
+
+    <script type="text/javascript">
+        @if($errors->any())
+
+            @foreach($errors->all() as $error)
+                toastr.error('{{ $error }}', 'Error', {
+                    closeButton: true,
+                    progressBar: true,
+                });
+            @endforeach
+    
+        @endif
+
+    </script>
     @stack('js')
 
     

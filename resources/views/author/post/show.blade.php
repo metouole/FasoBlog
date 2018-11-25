@@ -39,7 +39,7 @@
                     </h2>
                 </div>
 
-                <div class="body">       
+                <div class="body">
                         {!! $post->body !!}
                 </div>
             </div>
@@ -53,10 +53,10 @@
                     </h2>
                 </div>
 
-                <div class="body bg-cyan">       
+                <div class="body bg-cyan">
                     @foreach($post->categories as $category)
                         <span class="label bg-cyan"> {{ $category->name }}</span>
-                    @endforeach        
+                    @endforeach
                 </div>
             </div>
 
@@ -67,10 +67,10 @@
                     </h2>
                 </div>
 
-                <div class="body bg-green">       
+                <div class="body bg-green">
                     @foreach($post->tags as $tag)
                         <span class="label bg-cyan"> {{ $tag->name }}</span>
-                    @endforeach        
+                    @endforeach
                 </div>
             </div>
 
@@ -81,8 +81,8 @@
                     </h2>
                 </div>
 
-                <div class="body bg-amber">       
-                    <img class="img-responsive thumbnail" src="{{ Storage::disk('public')->url('post/'.$post->image) }}" alt="">     
+                <div class="body bg-amber">
+                    <img class="img-responsive thumbnail" src="{{ Storage::disk('public')->url('post/'.$post->image) }}" alt="">
                 </div>
             </div>
 
@@ -90,7 +90,7 @@
 
     </div>
     <!-- #END# Horizontal Layout -->
-    
+
     </form>
 
 </div>
